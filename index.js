@@ -88,6 +88,8 @@ server.use('/users',isAuth(),usersRouter.router);
 server.use('/auth',authRouter.router);
 server.use('/cart',isAuth(),cartRouter.router);
 server.use('/orders',isAuth(),orderRouter.router);
+//this line we add to maek react router worker in case of other routes doesnt match
+server.get("*", (req, res) =>res.sendFile(path.resolve('build','index.html')))
 
 
 
