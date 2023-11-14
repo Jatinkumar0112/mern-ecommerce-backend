@@ -169,7 +169,7 @@ passport.use('jwt',new JwtStrategy(opts, async function(jwt_payload, done) {
 
   
 server.post("/create-payment-intent", async (req, res) => {
-  const { totalAmount } = req.body;
+  const { totalAmount, orderId } = req.body;
 
   // Create a PaymentIntent with the order amount and currency
   const paymentIntent = await stripe.paymentIntents.create({
@@ -178,6 +178,11 @@ server.post("/create-payment-intent", async (req, res) => {
     automatic_payment_methods: {
       enabled: true,
     },
+    metadata:{
+      orderId
+      // this info will go to stripe => and then to our webhook
+      // so we can conclude that payment was successful, even if client closes window after pay
+    }
   });
 
   res.send({
